@@ -1,0 +1,71 @@
+// Contract elements should be laid out in the following order:
+// Pragma statements
+// Import statements
+// Events
+// Errors
+// Interfaces
+// Libraries
+// Contracts
+
+// Inside each contract, library or interface, use the following order:
+// Type declarations
+// State variables
+// Events
+// Errors
+// Modifiers
+// Functions
+
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+contract Tino_NFT is ERC721URIStorage, Ownable {
+    uint256 private immutable i_maxSupply;
+    uint256 private s_counter = 0;
+    address private s_minter;
+
+    event NFT_minted(address indexed owner);
+
+    modifier onlyMinter() {
+        require(msg.sender == s_minter, "Only for minter to mint!");
+        _;
+    }
+
+    constructor(
+        uint256 maxSupply,
+        address minter
+    ) Ownable(msg.sender) ERC721("TinoNFT", "TFT") {
+        i_maxSupply = maxSupply;
+        s_minter = minter;
+    }
+
+    function mint(
+        address to,
+        string memory tokenuri
+    ) external payable onlyMinter {
+        require(s_counter < i_maxSupply - 1, "All NFT is minted!");
+        _safeMint(to, s_counter);
+        _setTokenURI(s_counter, tokenuri);
+        s_counter++;
+        emit NFT_minted(to);
+    }
+
+    function setMinter(address newMinter) external onlyOwner {
+        s_minter = newMinter;
+    }
+
+    // Getter functions
+    function getMinter() public view returns (address) {
+        return s_minter;
+    }
+
+    function getMintedAmount() public view returns (uint256) {
+        return (s_counter + 1);
+    }
+
+    function getMaxSupply() public view returns (uint256) {
+        return i_maxSupply;
+    }
+}

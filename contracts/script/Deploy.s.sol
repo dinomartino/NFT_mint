@@ -8,7 +8,7 @@ contract Deploy is Script {
 
     function run() external {
         vm.startBroadcast();
-        tinoNFT = new Tino_NFT(20, msg.sender);
+        tinoNFT = new Tino_NFT(20);
         vm.stopBroadcast();
     }
 }

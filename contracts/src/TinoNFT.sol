@@ -29,11 +29,9 @@ contract Tino_NFT is ERC721URIStorage, Ownable {
     event NFT_minted(address indexed owner);
 
     constructor(
-        uint256 maxSupply,
-        address minter
+        uint256 maxSupply
     ) Ownable(msg.sender) ERC721("TinoNFT", "TFT") {
         i_maxSupply = maxSupply;
-        s_minter = minter;
     }
 
     function mint(address to, string memory tokenuri) external payable {

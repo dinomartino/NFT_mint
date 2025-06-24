@@ -45,7 +45,7 @@ contract Tino_NFT is ERC721URIStorage, Ownable {
         address to,
         string memory tokenuri
     ) external payable onlyMinter {
-        require(s_counter < i_maxSupply - 1, "All NFT is minted!");
+        require(s_counter < i_maxSupply, "All NFT is minted!");
         _safeMint(to, s_counter);
         _setTokenURI(s_counter, tokenuri);
         s_counter++;
@@ -62,7 +62,7 @@ contract Tino_NFT is ERC721URIStorage, Ownable {
     }
 
     function getMintedAmount() public view returns (uint256) {
-        return (s_counter + 1);
+        return (s_counter);
     }
 
     function getMaxSupply() public view returns (uint256) {
